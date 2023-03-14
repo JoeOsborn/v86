@@ -49,7 +49,6 @@ export function ScreenAdapter(options, screen_fill_buffer)
     }
 
     const cursor_element = document.createElement("div");
-
     var
         /** @type {number} */
         cursor_row,
