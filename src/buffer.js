@@ -742,6 +742,7 @@
                 },
                 headers: {
                     Range: "bytes=0-0",
+                    "Accept-Encoding": "identity"
                 }
             });
         };

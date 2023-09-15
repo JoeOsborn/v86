@@ -577,6 +577,7 @@ function load_file(filename, options, n_tries)
     {
         let start = options.range.start;
         let end = start + options.range.length - 1;
+        http.setRequestHeader("Accept-Encoding", "identity");
         http.setRequestHeader("Range", "bytes=" + start + "-" + end);
 
         // Abort if server responds with complete file in response to range
