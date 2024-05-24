@@ -101,6 +101,29 @@
 
     function onload()
     {
+        // Load previously entered options via the local storage
+        const elementsToRestore = ['memory_size', 'video_memory_size', 'networking_proxy', 'disable_audio', 'enable_acpi', 'boot_order'];
+        for (const elementId of elementsToRestore)
+        {
+            const savedValue = window.localStorage.getItem(elementId);
+          
+            if (savedValue !== null)
+            {
+                const element = document.getElementById(elementId);
+                if (element)
+                {
+                    if(element.type === 'checkbox')
+                    {
+                        element.checked = savedValue === 'true' ? true : false;
+                    }
+                    else
+                    {
+                        element.value = savedValue;
+                    }
+                }
+            }
+        }
+
         if(!window.WebAssembly)
         {
             alert("Your browser is not supported because it doesn't support WebAssembly");
@@ -116,6 +139,22 @@
 
         $("start_emulation").onclick = function()
         {
+            // Save entered options into the local storage
+            for (const elementId of elementsToRestore)
+            {
+                const element = document.getElementById(elementId);
+                if(element){
+                    if(element.tagName === 'SELECT' || element.type !== 'checkbox')
+                    {
+                        window.localStorage.setItem(elementId, element.value);
+                    }
+                    else
+                    {
+                        window.localStorage.setItem(elementId, element.checked);
+                    }
+                }
+            }
+
             $("boot_options").style.display = "none";
             set_profile("custom");
 
@@ -227,14 +266,14 @@
                 id: "serenity",
                 name: "SerenityOS",
                 hda: {
-                    url: host + "serenity-v2.img",
-                    size: 700448768,
+                    url: host + "serenity-v3/.img.zst",
+                    size: 734003200,
                     async: true,
                     fixed_chunk_size: 1024 * 1024,
-                    use_parts: !ON_LOCALHOST,
+                    use_parts: true,
                 },
                 memory_size: 512 * 1024 * 1024,
-                state: { url: host + "serenity_state-v3.bin.zst", },
+                state: { url: host + "serenity_state-v4.bin.zst", },
                 homepage: "https://serenityos.org/",
                 mac_address_translation: true,
             },
@@ -242,38 +281,11 @@
                 id: "serenity-boot",
                 name: "SerenityOS",
                 hda: {
-                    url: host + "serenity-v2.img",
-                    size: 700448768,
+                    url: host + "serenity-v3/.img.zst",
+                    size: 734003200,
                     async: true,
                     fixed_chunk_size: 1024 * 1024,
-                    use_parts: !ON_LOCALHOST,
-                },
-                memory_size: 512 * 1024 * 1024,
-                homepage: "https://serenityos.org/",
-            },
-            {
-                id: "serenity-old",
-                name: "SerenityOS",
-                hda: {
-                    url: host + "serenity.img",
-                    size: 876 * 1024 * 1024,
-                    async: true,
-                    fixed_chunk_size: 1024 * 1024,
-                    use_parts: !ON_LOCALHOST,
-                },
-                memory_size: 512 * 1024 * 1024,
-                state: { url: host + "serenity_state-v2.bin.zst", },
-                homepage: "https://serenityos.org/",
-            },
-            {
-                id: "serenity-old-boot",
-                name: "SerenityOS",
-                hda: {
-                    url: host + "serenity.img",
-                    size: 876 * 1024 * 1024,
-                    async: true,
-                    fixed_chunk_size: 1024 * 1024,
-                    use_parts: !ON_LOCALHOST,
+                    use_parts: true,
                 },
                 memory_size: 512 * 1024 * 1024,
                 homepage: "https://serenityos.org/",
@@ -322,7 +334,7 @@
                 id: "fiwix",
                 memory_size: 256 * 1024 * 1024,
                 hda: {
-                    url: host + "fiwixos-3.2-i386.img",
+                    url: host + "fiwixos-doom-3.2-i386.img",
                     size: 1024 * 1024 * 1024,
                     async: true,
                     fixed_chunk_size: 1024 * 1024,
@@ -335,15 +347,13 @@
                 id: "haiku",
                 memory_size: 512 * 1024 * 1024,
                 hda: {
-                    url: host + "haiku-v2.img",
+                    url: host + "haiku-v3.img",
                     size: 1 * 1024 * 1024 * 1024,
                     async: true,
                     fixed_chunk_size: 1024 * 1024,
                     use_parts: !ON_LOCALHOST,
                 },
-                state: {
-                    url: host + "haiku_state-v2.bin.zst",
-                },
+                state: { url: host + "haiku_state-v3.bin.zst" },
                 name: "Haiku",
                 homepage: "https://www.haiku-os.org/",
             },
@@ -351,7 +361,7 @@
                 id: "haiku-boot",
                 memory_size: 512 * 1024 * 1024,
                 hda: {
-                    url: host + "haiku-v2.img",
+                    url: host + "haiku-v3.img",
                     size: 1 * 1024 * 1024 * 1024,
                     async: true,
                     fixed_chunk_size: 1024 * 1024,
@@ -367,7 +377,6 @@
                     size: 8 * 1024 * 1024,
                     async: false,
                 },
-                boot_order: 0x132,
                 name: "MS-DOS",
             },
             {
@@ -378,6 +387,15 @@
                     async: false,
                 },
                 name: "FreeDOS",
+            },
+            {
+                id: "freegem",
+                hda: {
+                    url: host + "freegem.bin",
+                    size: 209715200,
+                    async: true,
+                },
+                name: "Freedos with FreeGEM",
             },
             {
                 id: "psychdos",
@@ -447,6 +465,34 @@
                 name: "Buildroot Linux",
                 filesystem: {},
                 cmdline: "tsc=reliable mitigations=off random.trust_cpu=on",
+            },
+            {
+                id: "basiclinux",
+                hda: {
+                    url: host + "bl3-5.img",
+                    size: 104857600,
+                    async: false,
+                },
+                name: "BasicLinux",
+            },
+            {
+                id: "xpud",
+                cdrom: {
+                    url: host + "xpud-0.9.2.iso",
+                    size: 67108864,
+                    async: false,
+                },
+                name: "xPUD",
+                memory_size: 256 * 1024 * 1024,
+            },
+            {
+                id: "elks",
+                hda: {
+                    url: host + "elks-hd32-fat.img",
+                    size: 32514048,
+                    async: false,
+                },
+                name: "ELKS",
             },
             {
                 id: "nodeos",
@@ -629,7 +675,6 @@
                     fixed_chunk_size: 256 * 1024,
                     use_parts: !ON_LOCALHOST,
                 },
-                boot_order: 0x132,
                 name: "Windows 2000",
             },
             {
@@ -971,6 +1016,11 @@
             link.rel = "prefetch";
             link.href = "build/v86.wasm";
             document.head.appendChild(link);
+        }
+
+        if(query_args["disable_jit"])
+        {
+            settings.disable_jit = true;
         }
 
         if(query_args["use_bochs_bios"])
@@ -1366,6 +1416,7 @@
             "bzimage_initrd_from_filesystem": settings.bzimage_initrd_from_filesystem,
 
             "acpi": enable_acpi,
+            "disable_jit": settings.disable_jit,
             "initial_state": settings.initial_state,
             "filesystem": settings.filesystem || {},
             "disable_speaker": disable_audio,
@@ -1729,6 +1780,32 @@
                 elem.blur();
             };
         }
+
+        $("change_fda_image").value = settings.fda ? "Eject floppy image" : "Insert floppy image";
+        $("change_fda_image").onclick = function()
+        {
+            if(emulator.v86.cpu.devices.fdc.fda_image)
+            {
+                emulator.eject_fda();
+                $("change_fda_image").value = "Insert floppy image";
+            }
+            else
+            {
+                const file_input = document.createElement("input");
+                file_input.type = "file";
+                file_input.onchange = async function(e)
+                {
+                    const file = file_input.files[0];
+                    if(file)
+                    {
+                        await emulator.set_fda({ buffer: file });
+                        $("change_fda_image").value = "Eject floppy image";
+                    }
+                };
+                file_input.click();
+            }
+            $("change_fda_image").blur();
+        };
 
         $("memory_dump").onclick = function()
         {

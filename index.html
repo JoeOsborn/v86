@@ -42,13 +42,15 @@
             OpenBSD 6.6 base install. Restored from snapshot.</td></tr>
             <tr id="start_9front"><td><a href="?profile=9front">9front</a> <small>4.4 MB</small></td><td>
             A Plan 9 fork.</td></tr>
-            <tr id="start_haiku"><td><a href="?profile=haiku">Haiku</a> <small>46 MB</small></td><td>
+            <tr id="start_haiku"><td><a href="?profile=haiku">Haiku</a> <small>38 MB</small></td><td>
             An open-source operating system inspired by BeOS. Restored from snapshot. Includes network support.</td></tr>
 
-            <tr id="start_serenity"><td><a href="?profile=serenity">SerenityOS</a> <small>11 MB</small></td><td>
+            <tr id="start_serenity"><td><a href="?profile=serenity">SerenityOS</a> <small>17 MB</small></td><td>
             A graphical Unix-like operating system. Restored from snapshot.</td></tr>
             <tr id="start_helenos"><td><a href="?profile=helenos">HelenOS</a> <small>7.9 MB</small></td><td>
             A graphical operating system based on a multiserver microkernel design</td></tr>
+            <tr id="start_fiwix"><td><a href="?profile=fiwix">FiwixOS</a> <small>15 MB</small></td><td>
+            A Unix-like OS written from scratch. Includes Doom.</td></tr>
             <tr id="start_android"><td><a href="?profile=android">Android-x86</a> <small>42 MB</small></td><td>
             An x86 port of the Android Open Source Project, version 1.6. Quite slow. Takes about 10 minutes to boot.</td></tr>
 
@@ -156,6 +158,7 @@
                 <td><label for="boot_order">Boot order</label></td>
                 <td>
                     <select id="boot_order">
+                        <option value="0">Auto</option>
                         <option value="213">CD / Floppy / Hard Disk</option>
                         <option value="123">CD / Hard Disk / Floppy</option>
                         <option value="231">Floppy / CD / Hard Disk</option>
@@ -182,6 +185,7 @@
         <input type="button" value="Get hard disk image" id="get_hda_image">
         <input type="button" value="Get second hard disk image" id="get_hdb_image">
         <input type="button" value="Get cdrom image" id="get_cdrom_image">
+        <input type="button" value="Insert floppy image" id="change_fda_image">
         <input type="button" value="Save State" id="save_state">
         <input type="button" value="Load State" id="load_state"> <input type="file" style="display: none" id="load_state_input">
         <input type="button" value="Memory Dump" id="memory_dump">
@@ -197,19 +201,7 @@
             <input type="number" min="0.25" step="0.25" value="1.0" id="scale" style="width: 50px">
         </label>
 
-        <br>
-        <label id="change_fda" style="display: none">
-            Change floppy:
-            <input type="file">
-        </label>
-
-        <label id="change_cdrom" style="display: none">
-            Change CD:
-            <input type="file">
-        </label>
-
-        <br>
-
+        <br><br>
     </div>
     <pre style="display: none" id="loading"></pre>
 </div>
