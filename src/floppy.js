@@ -115,7 +115,7 @@ FloppyController.prototype.get_state = function()
     state[0] = this.bytes_expecting;
     state[1] = this.receiving_command;
     state[2] = this.receiving_index;
-    //state[3] = this.next_command;
+    state[3] = this.fda_image;
     state[4] = this.response_data;
     state[5] = this.response_index;
     state[6] = this.response_length;
@@ -140,7 +140,11 @@ FloppyController.prototype.set_state = function(state)
     this.bytes_expecting = state[0];
     this.receiving_command = state[1];
     this.receiving_index = state[2];
-    this.next_command = state[3];
+    this.next_command = null;
+  if (state[3] != 0 && state[3] != null) {
+    console.log("maybe load fda?",state[3]);
+      // this.fda_image = state[3];
+    }
     this.response_data = state[4];
     this.response_index = state[5];
     this.response_length = state[6];
