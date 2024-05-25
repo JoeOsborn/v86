@@ -154,8 +154,7 @@ FloppyController.prototype.set_state = function(state)
     this.receiving_index = state[2];
     this.next_command = null;
     if (state[3] != 0 && state[3] != null) {
-      console.log("maybe load fda?",state[3]);
-      this.fda_image = state[3];
+      this.fda_image && this.fda_image.set_state(state[3]);
     }
     this.response_data = state[4];
     this.response_index = state[5];
