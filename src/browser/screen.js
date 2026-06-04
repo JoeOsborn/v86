@@ -670,7 +670,7 @@ export function ScreenAdapter(options, screen_fill_buffer)
             width * 2 < window.innerWidth * window.devicePixelRatio &&
             height * 2 < window.innerHeight * window.devicePixelRatio)
         {
-            base_scale = 2;
+            base_scale = 1;
         }
         else
         {
