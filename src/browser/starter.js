@@ -872,6 +872,10 @@ V86.prototype.restore_state = async function(state)
 {
     dbg_assert(arguments.length === 1);
     this.v86.restore_state(state);
+    if(this.screen_adapter)
+    {
+        this.screen_adapter.refresh_scale();
+    }
 };
 
 /**

@@ -680,6 +680,10 @@ export function ScreenAdapter(options, screen_fill_buffer)
         update_scale_graphic();
     };
 
+    this.refresh_scale = function() {
+        this.set_scale(scale_x, scale_y);
+    }
+
     this.set_scale = function(s_x, s_y)
     {
         scale_x = s_x;
